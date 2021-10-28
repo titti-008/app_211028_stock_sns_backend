@@ -1,0 +1,10 @@
+{
+  "name": "rails-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "top-note-h <ikuzah_m2005@yahoo.co.jp>",
+  "license": "MIT",
+  "scripts": {
+    "start": "bundle exec foreman start"
+  }
+}
