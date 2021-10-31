@@ -1,7 +1,4 @@
-class ApplicationController < ActionController::API
-  def hello_world
-    render json: { text: "hello world!!!!"}
-  end
+class Api::V1::StaticPageController < ApplicationController
 
   def home
     render json: {text: "This is home!!"}
