@@ -15,10 +15,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       credentials: true # 要追加
 
   end
-end
 
-
-Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins "app-211028-react-frontend.herokuapp.com"
 
@@ -28,4 +25,6 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       credentials: true # 要追加
 
   end
+
 end
+
