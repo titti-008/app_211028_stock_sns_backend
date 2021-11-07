@@ -10,10 +10,12 @@ Rails.application.routes.draw do
   
 
   get "/home", to: "application#home"
-  get "/help", to: "application#help"
-
   namespace :api do
     namespace :v1 do
+
+      post "/login", to: "sessions#login"
+      delete "/logout", to:"sessions#logout"
+      get "/logged_in", to:"sessions#logged_in?"
 
       resources :users, only: %i[index show new create update destroy]
 

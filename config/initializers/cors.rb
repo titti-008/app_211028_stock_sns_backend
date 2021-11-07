@@ -7,10 +7,12 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins /localhost\:\d+/, /app-211028-react-frontend\.herokuapp\.com/
+    origins 'http://localhost:3000' , /app-211028-react-frontend\.herokuapp\.com/
 
     resource '*',
       headers: :any,
-      methods: [:get, :post, :put, :patch, :delete, :options, :head]
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      credentials: true # 要追加
+
   end
 end
