@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get "hello_world", to: "application#hello_world"
 
   if Rails.env == "production"
-    root to: redirect("https://app-211028-react-frontend.herokuapp.com/static_pages/home")
+    root to: redirect("https://app-211028-react-frontend.herokuapp.com/")
   else
     root to: redirect("http://localhost:3000/static_pages/home")
   end
