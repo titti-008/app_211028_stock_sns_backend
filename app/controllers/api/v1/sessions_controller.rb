@@ -37,7 +37,7 @@ class Api::V1::SessionsController < ApplicationController
       session_id: session[:user_id]
     }
     else
-      render json: { status:401, loggedIn: false, message: "ユーザーが存在しません" ,session_id: session[:user_id]}
+      render json: { loggedIn: false, message: "ユーザーが存在しません" ,session_id: session[:user_id]},status:401
     end
   end
 
