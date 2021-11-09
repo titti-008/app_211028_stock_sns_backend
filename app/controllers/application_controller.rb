@@ -6,7 +6,7 @@ class ApplicationController < ActionController::API
 
   # skip_before_action :verify_authenticaty_token
 
-  def login!(user)
+  def login_user(user)
     session[:user_id] = user.id
   end
 
