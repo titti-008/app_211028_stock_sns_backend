@@ -5,7 +5,7 @@ class Api::V1::SessionsController < ApplicationController
   def login
     @user = User.find_by(email: session_params[:email])
     if @user && @user.authenticate(session_params[:password])
-      login! @user
+      login_user @user
       render json:  { loggedIn: true, user: {
         id: @user.id, 
         name: @user.name,
@@ -19,7 +19,7 @@ class Api::V1::SessionsController < ApplicationController
 
   def logout
     session.delete(:user_id)
-    @current_user = nil
+    @current_user = nil 
     render json: { status: 200, loggedIn: false, message: "ログアウトしました" }
   end
 
@@ -33,9 +33,11 @@ class Api::V1::SessionsController < ApplicationController
         name: @current_user.name,
         email: @current_user.email,
         createdAt: @current_user.created_at,
-      }}
+      },
+      session_id: session[:user_id]
+    }
     else
-      render json: { status:401, loggedIn: false, message: "ユーザーが存在しません" }
+      render json: { loggedIn: false, message: "ユーザーが存在しません" ,session_id: session[:user_id]},status:401
     end
   end
 
