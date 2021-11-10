@@ -16,6 +16,9 @@ gem 'puma', '~> 5.0'
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+# フロントエンドでのセッションクッキーの保存のため追加する
+gem "rails_same_site_cookie", "~> 0.1.8"  # 追加する
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
