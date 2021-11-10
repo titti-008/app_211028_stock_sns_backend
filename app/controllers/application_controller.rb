@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
   include ActionController::Cookies
   include ActionController::Helpers
-  helper_method :login!, :current_user
+  helper_method :login!, :current_user, :current_user?
 
 
   # skip_before_action :verify_authenticaty_token
@@ -14,6 +14,10 @@ class ApplicationController < ActionController::API
 
     @current_user ||= User.find_by(id:session[:user_id])
     
+  end
+
+  def current_user?(user)
+    user && user == current_user 
   end
 
 
