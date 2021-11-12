@@ -41,6 +41,6 @@ module RailsBackend
     config.middleware.use ActionDispatch::Cookies # 追加
     config.middleware.use ActionDispatch::Session::CookieStore # 追加
     config.action_dispatch.cookies_same_site_protection = :none  # 追加する
-    # config.middleware.use ActionDispatch::ContentSecurityPolicy::Middleware # うまくいかないので試しに追加
+    config.middleware.use ActionDispatch::ContentSecurityPolicy::Middleware # うまくいかないので試しに追加
   end
 end

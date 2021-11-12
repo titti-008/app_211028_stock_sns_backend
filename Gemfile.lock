@@ -169,7 +169,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 6.1.4, >= 6.1.4.1)
   rails-i18n
-  rails_same_site_cookie (~> 0.1.8)
+  rails_same_site_cookie
   spring
   tzinfo-data
 

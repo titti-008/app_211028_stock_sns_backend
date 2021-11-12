@@ -34,7 +34,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.new(user_params)
     
     if @user.save
-      login_user @user
+      login_user(@user)
       render json: { user:{
         id: @user.id, 
         name: @user.name,
