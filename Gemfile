@@ -15,6 +15,7 @@ gem 'puma', '~> 5.0'
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.7'
+gem "rails-i18n"
 
 # フロントエンドでのセッションクッキーの保存のため追加する
 gem "rails_same_site_cookie", "~> 0.1.8"  # 追加する

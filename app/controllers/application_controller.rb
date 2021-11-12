@@ -8,6 +8,7 @@ class ApplicationController < ActionController::API
 
   def login_user(user)
     session[:user_id] = user.id
+
   end
 
   def current_user
