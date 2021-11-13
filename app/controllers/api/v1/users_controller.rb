@@ -35,10 +35,18 @@ class Api::V1::UsersController < ApplicationController
     
     if @user.save
       login_user @user
-      render json: { user: @user }, status: 201
+      render json: { user:{
+        id: @user.id, 
+        name: @user.name,
+        email: @user.email,
+        createdAt: @user.created_at,
+        }, messages:["ユーザー情報が登録できました"]  }, 
+        status: 201
 
     else
-      render json: {message: @user.errors }, status: 500
+      puts @user.errors.full_messages
+      render json: {messages: @user.errors.full_messages }, status: 500
+
     end
   end
 
@@ -49,11 +57,12 @@ class Api::V1::UsersController < ApplicationController
     if current_user?(@user)
       if @user.update(user_params)
         render json: { loggedIn: true, user: {
-          id: @current_user.id, 
-          name: @current_user.name,
-          email: @current_user.email,
-          createdAt: @current_user.created_at,
-        } }
+          id: @user.id, 
+          name: @user.name,
+          email: @user.email,
+          createdAt: @user.created_at,
+        }, 
+        message: "ユーザー情報更新完了" }
       else
         render json: { message: @user.errors }, status: 500
       end
