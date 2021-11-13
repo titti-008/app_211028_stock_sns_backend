@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
   include ActionController::Cookies
   include ActionController::Helpers
-  helper_method :login!, :current_user, :current_user?
+  helper_method :login_user, :current_user, :current_user?
 
 
   # skip_before_action :verify_authenticaty_token

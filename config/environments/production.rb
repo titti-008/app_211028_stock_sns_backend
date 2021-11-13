@@ -110,4 +110,12 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
+
+
+
+  config.middleware.use ActionDispatch::Cookies # 追加
+  config.middleware.use ActionDispatch::Session::CookieStore # 追加
+
+  config.action_dispatch.cookies_same_site_protection = :none  # 追加する
+  config.middleware.use ActionDispatch::ContentSecurityPolicy::Middleware # 追加
 end
