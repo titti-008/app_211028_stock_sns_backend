@@ -62,13 +62,14 @@ class Api::V1::UsersController < ApplicationController
           email: @user.email,
           createdAt: @user.created_at,
         }, 
-        message: "ユーザー情報更新完了" }
+        messages: ["ユーザー情報更新完了" ]}, status: 201
+
       else
-        render json: { message: @user.errors }, status: 500
+        render json: { messages: @user.errors.full_messages}, status: 202
       end
       
     else
-      render json: {message: "ログインされていません"}, status:500
+      render json: {messages: ["ログインされていません"]}, status:202
     end
 
 
