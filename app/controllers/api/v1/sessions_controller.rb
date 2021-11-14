@@ -42,7 +42,7 @@ class Api::V1::SessionsController < ApplicationController
       messages: ["ログイン確認:OK"]
     }, status:200
     else
-      render json: {  loggedIn: false, user: nil, messages:["ログインしているユーザーが存在しません", "session[:user_id]:#{session[:user_id]}"]} ,status: 202
+      render json: {  loggedIn: false, user: nil, messages:["ログインしているユーザーが存在しません"]} ,status: 202
     end
   end
 
