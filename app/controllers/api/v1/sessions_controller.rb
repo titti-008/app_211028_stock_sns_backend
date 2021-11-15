@@ -16,7 +16,7 @@ class Api::V1::SessionsController < ApplicationController
         email: @user.email,
         createdAt: @user.created_at,
         admin: @user.admin
-      }}
+      }}, status: 200
     else
       render json:  {  messages:["認証に失敗しました。","正しいメールアドレスとユーザー名を入力するか、新規登録を行ってください。"]}, status: 202
     end

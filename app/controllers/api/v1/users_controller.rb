@@ -36,7 +36,7 @@ class Api::V1::UsersController < ApplicationController
 
     else
       puts @user.errors.full_messages
-      render json: {messages: @user.errors.full_messages }, status: 500
+      render json: {messages: @user.errors.full_messages }, status: 202
 
     end
   end
