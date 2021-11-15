@@ -15,6 +15,7 @@ class Api::V1::SessionsController < ApplicationController
         name: @user.name,
         email: @user.email,
         createdAt: @user.created_at,
+        admin: @user.admin
       }}
     else
       render json:  {  messages:["認証に失敗しました。","正しいメールアドレスとユーザー名を入力するか、新規登録を行ってください。"]}, status: 202
@@ -28,8 +29,6 @@ class Api::V1::SessionsController < ApplicationController
   end
 
   def logged_in?
-
-
       @current_user ||= User.find_by(id: session[:user_id])
     
     if @current_user
@@ -38,6 +37,7 @@ class Api::V1::SessionsController < ApplicationController
         name: @current_user.name,
         email: @current_user.email,
         createdAt: @current_user.created_at,
+        admin: @current_user.admin
       },
       messages: ["ログイン確認:OK"]
     }, status:200

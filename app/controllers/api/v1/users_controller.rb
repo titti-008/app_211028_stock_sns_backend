@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :current_user, only: :update
+  before_action :current_user, only: [:update, :destroy]
+  before_action :admin_user, only: [:destroy]
 
 
   def show
@@ -13,22 +14,11 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def index
-    @users = []
 
-    User.all.each do |_user|
-      @user = {
-        id: _user.id,
-        name: _user.name,
-        createdAt: _user.created_at
-      }
-      @users.push(@user)
-    end
-    render json: @users
+    @users = get_users()
+    render json: {users: @users, messages:["ユーザー一覧を表示します"]}, status: 200
   end
 
-  def new
-
-  end
 
   def create
     @user = User.new(user_params)
@@ -40,6 +30,7 @@ class Api::V1::UsersController < ApplicationController
         name: @user.name,
         email: @user.email,
         createdAt: @user.created_at,
+        admin: @user.admin
         }, messages:["ユーザー情報が登録できました"]  }, 
         status: 201
 
@@ -47,6 +38,15 @@ class Api::V1::UsersController < ApplicationController
       puts @user.errors.full_messages
       render json: {messages: @user.errors.full_messages }, status: 500
 
+    end
+  end
+
+  def destroy
+    @user = User.find_by(id: params[:id])
+    @name= @user.name
+    if @user.destroy
+      @users = get_users
+      render json: {messages:["ユーザー(#{@name})を削除しました。"], users: @users}, status:200
     end
   end
 
@@ -61,6 +61,7 @@ class Api::V1::UsersController < ApplicationController
           name: @user.name,
           email: @user.email,
           createdAt: @user.created_at,
+          admin: @user.admin
         }, 
         messages: ["ユーザー情報更新完了" ]}, status: 201
 
@@ -80,6 +81,29 @@ class Api::V1::UsersController < ApplicationController
   ##################
     def user_params
       params.require(:user).permit(:id, :email, :name, :password, :password_confirmation)
+    end
+
+    def admin_user
+      if !current_user.admin?
+        render json: { messages:["管理者以外ユーザーの削除はできません。"]}, status: 202
+      end
+
+    end
+
+    def get_users
+      @users = []
+
+      User.all.each do |_user|
+        @user = {
+          id: _user.id,
+          name: _user.name,
+          createdAt: _user.created_at,
+          admin: _user.admin,
+          email: _user.email
+        }
+        @users.push(@user)
+      end
+      return @users
     end
 
     # #正しいユーザーかどうか確認
