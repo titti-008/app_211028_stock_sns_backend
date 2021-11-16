@@ -5,8 +5,8 @@ class Api::V1::SessionsController < ApplicationController
   def login
     @user = User.find_by(email: session_params[:email])
     if @user && @user.authenticate(session_params[:password])
-      session[:user_id] = @user.id
-      # login_user(@user)
+      log_in @user
+      params[:user][:remember_me] == 'on' ? remember(@user) : forget(@user)
       render json:  { loggedIn: true, messages:[
         "ログインしました。",
         "やぁ、#{@user.name}"
@@ -23,15 +23,12 @@ class Api::V1::SessionsController < ApplicationController
   end
 
   def logout
-    session.delete(:user_id)
-    @current_user = nil 
+    log_out if login?
     render json: { loggedIn: false, messages:[ "ログアウトしました" ]}, status: 200
   end
 
   def logged_in?
-      @current_user ||= User.find_by(id: session[:user_id])
-    
-    if @current_user
+    if current_user
       render json: { loggedIn: true, user: {
         id: @current_user.id, 
         name: @current_user.name,
@@ -50,6 +47,6 @@ class Api::V1::SessionsController < ApplicationController
   private ###########################3
 
     def session_params
-      params.require(:user).permit( :email, :password, :id)
+      params.require(:user).permit( :email, :password, :id, :remember_me)
     end
 end

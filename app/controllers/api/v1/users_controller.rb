@@ -24,7 +24,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.new(user_params)
     
     if @user.save
-      login_user(@user)
+      log_in @user
       render json: { user:{
         id: @user.id, 
         name: @user.name,
@@ -32,11 +32,11 @@ class Api::V1::UsersController < ApplicationController
         createdAt: @user.created_at,
         admin: @user.admin
         }, messages:["ユーザー情報が登録できました"]  }, 
-        status: 201
+        status: 200
 
     else
       puts @user.errors.full_messages
-      render json: {messages: @user.errors.full_messages }, status: 500
+      render json: {messages: @user.errors.full_messages }, status: 202
 
     end
   end
@@ -105,11 +105,5 @@ class Api::V1::UsersController < ApplicationController
       end
       return @users
     end
-
-    # #正しいユーザーかどうか確認
-    # def current_user
-    #   @user = User.find_by(id: params[:id])
-
-    # end
 
 end

@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       get "/logged_in", to:"sessions#logged_in?"
 
       resources :users, only: %i[index show new create update destroy]
+      resources :account_activations, only: [:edit]
 
     end
   end

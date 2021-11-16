@@ -38,14 +38,13 @@ module RailsBackend
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
 
-    # if Rails.env === "production"
 
-    #   config.api_only = false
-    #   config.middleware.use ActionDispatch::Cookies # 追加
-    #   config.middleware.use ActionDispatch::Session::CookieStore # 追加
+      config.api_only = false
+      config.middleware.use ActionDispatch::Cookies # 追加
+      config.middleware.use ActionDispatch::Session::CookieStore # 追加
   
-    #   config.action_dispatch.cookies_same_site_protection = :none  # 追加する
-    #   config.middleware.use ActionDispatch::ContentSecurityPolicy::Middleware # うまくいかないので試しに追加
-    # end
+      # config.action_dispatch.cookies_same_site_protection = :none  # 追加する
+      config.middleware.use ActionDispatch::ContentSecurityPolicy::Middleware # うまくいかないので試しに追加
+
   end
 end
