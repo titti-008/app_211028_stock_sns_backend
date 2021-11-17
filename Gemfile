@@ -17,6 +17,9 @@ gem 'puma', '~> 5.0'
 gem 'bcrypt', '~> 3.1.7'
 gem "rails-i18n"
 
+# .envファイルを扱うためのgem
+gem "dotenv-rails"
+
 # フロントエンドでのセッションクッキーの保存のため追加する
 gem "rails_same_site_cookie"   # 追加する "~> 0.1.8"
 

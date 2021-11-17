@@ -5,12 +5,19 @@ class Api::V1::UsersController < ApplicationController
 
   def show
     @user = User.find_by(id: params[:id])
-    render json: {
-      id: @user.id, 
-      name: @user.name,
-      email: @user.email,
-      createdAt: @user.created_at,
-    }
+    if @user.activated
+      render json: { user:{
+        id: @user.id, 
+        name: @user.name,
+        email: @user.email,
+        createdAt: @user.created_at,
+      },
+      messages:["#{@user.name}の情報を取得しました。"]
+      }, status:200
+    else
+      render json: {messages:["アカウントが有効化されていないユーザーです。"]}, status:202
+
+    end
   end
 
   def index
@@ -24,15 +31,21 @@ class Api::V1::UsersController < ApplicationController
     @user = User.new(user_params)
     
     if @user.save
-      log_in @user
-      render json: { user:{
-        id: @user.id, 
-        name: @user.name,
-        email: @user.email,
-        createdAt: @user.created_at,
-        admin: @user.admin
-        }, messages:["ユーザー情報が登録できました"]  }, 
-        status: 200
+      @user.send_activation_email
+      render json: { messages: [
+        "登録したメールアドレスにアカウント有効化用URLを送付しました。",
+        "メールを確認しアカウントの作成を完了させてください。"
+      ]}, status: 200
+
+      # log_in @user
+      # render json: { user:{
+      #   id: @user.id, 
+      #   name: @user.name,
+      #   email: @user.email,
+      #   createdAt: @user.created_at,
+      #   admin: @user.admin
+      #   }, messages:["ユーザー情報が登録できました"]  }, 
+      #   status: 200
 
     else
       puts @user.errors.full_messages
@@ -92,8 +105,9 @@ class Api::V1::UsersController < ApplicationController
 
     def get_users
       @users = []
+      
 
-      User.all.each do |_user|
+      User.where(activated: true).each do |_user|
         @user = {
           id: _user.id,
           name: _user.name,
