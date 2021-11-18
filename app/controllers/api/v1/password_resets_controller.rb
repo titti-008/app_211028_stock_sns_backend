@@ -65,7 +65,7 @@ class Api::V1::PasswordResetsController < ApplicationController
     def valid_user
       unless (@user && @user.activated? &&
               @user.authenticated?(:reset, params[:id]))
-        redirect_to root_url
+              render json:  { loggedIn:false, messages:["ユーザーが存在しないか、有効化されていない、再設定キーが無効であるため、失敗しました"]}, status: 202
       end
     end
 
