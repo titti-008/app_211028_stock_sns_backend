@@ -7,9 +7,9 @@ class UserMailer < ApplicationMailer
   end
 
 
-  def password_reset
-    @greeting = "Hi"
-
-    mail to: "to@example.org"
+  def password_reset(user)
+    @user = user
+    @url = "#{ENV["FRONT_END_URL"]}/password_resets/#{@user.reset_token}/edit/#{URI.encode_www_form(email: @user.email)}"
+    mail to: user.email, subject: "Password reset"
   end
 end

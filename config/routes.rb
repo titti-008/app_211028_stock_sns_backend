@@ -14,8 +14,10 @@ Rails.application.routes.draw do
       delete "/logout", to:"sessions#logout"
       get "/logged_in", to:"sessions#logged_in?"
 
+
       resources :users, only: %i[index show new create update destroy]
       resources :account_activations, only: [:edit]
+      resources :password_resets, only: [:create, :update]
 
     end
   end
