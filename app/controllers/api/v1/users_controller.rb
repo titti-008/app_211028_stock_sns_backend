@@ -5,6 +5,7 @@ class Api::V1::UsersController < ApplicationController
 
   def show
     @user = User.find_by(id: params[:id])
+    @microposts = @user.microposts
     if @user.activated
       render json: { user:{
         id: @user.id, 
