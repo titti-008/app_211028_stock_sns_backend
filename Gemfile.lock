@@ -72,6 +72,8 @@ GEM
       dotenv (= 2.7.6)
       railties (>= 3.2)
     erubi (1.10.0)
+    faker (2.19.0)
+      i18n (>= 1.6, < 2)
     ffi (1.15.4)
     foreman (0.87.2)
     globalid (0.5.2)
@@ -167,6 +169,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   dotenv-rails
+  faker
   foreman
   listen (~> 3.3)
   pg (~> 1.1)
