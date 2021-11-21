@@ -7,13 +7,10 @@ class Api::V1::UsersController < ApplicationController
     @user = User.find_by(id: params[:id])
     @microposts = @user.microposts
     if @user.activated
-      render json: { user:{
-        id: @user.id, 
-        name: @user.name,
-        email: @user.email,
-        createdAt: @user.created_at,
-      },
-      messages:["#{@user.name}の情報を取得しました。"]
+      render json: {
+        user: user_response(@user),
+        microposts: microposts_response(@microposts),
+        messages:["#{@user.name}の情報を取得しました。"]
       }, status:200
     else
       render json: {messages:["アカウントが有効化されていないユーザーです。"]}, status:202
@@ -70,14 +67,10 @@ class Api::V1::UsersController < ApplicationController
 
     if current_user?(@user)
       if @user.update(user_params)
-        render json: { loggedIn: true, user: {
-          id: @user.id, 
-          name: @user.name,
-          email: @user.email,
-          createdAt: @user.created_at,
-          admin: @user.admin
-        }, 
-        messages: ["ユーザー情報更新完了" ]}, status: 201
+        render json: { 
+          loggedIn: true, user: user_response(@user) , 
+          messages: ["ユーザー情報更新完了" ]
+        }, status: 201
 
       else
         render json: { messages: @user.errors.full_messages}, status: 202
@@ -109,13 +102,7 @@ class Api::V1::UsersController < ApplicationController
       
 
       User.where(activated: true).each do |_user|
-        @user = {
-          id: _user.id,
-          name: _user.name,
-          createdAt: _user.created_at,
-          admin: _user.admin,
-          email: _user.email
-        }
+        @user = user_response(_user)
         @users.push(@user)
       end
       return @users

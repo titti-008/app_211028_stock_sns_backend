@@ -30,13 +30,8 @@ class Api::V1::SessionsController < ApplicationController
         render json:  { loggedIn: true, messages:[
           "ログインしました。",
           "やぁ、#{@user.name}"
-        ] ,user: {
-          id: @user.id, 
-          name: @user.name,
-          email: @user.email,
-          createdAt: @user.created_at,
-          admin: @user.admin
-        }}
+        ] ,user: user_response(@user)
+      }
       else
         render json:  {  messages:["アカウントが有効化されていません。","登録されたメールアドレスに送られたメールからアカウントの有効化を行ってください。"]}, status: 202
       end
@@ -53,13 +48,7 @@ class Api::V1::SessionsController < ApplicationController
 
   def logged_in?
     if current_user
-      render json: { loggedIn: true, user: {
-        id: @current_user.id, 
-        name: @current_user.name,
-        email: @current_user.email,
-        createdAt: @current_user.created_at,
-        admin: @current_user.admin
-      },
+      render json: { loggedIn: true, user: user_response(@current_user),
       messages: ["ログイン確認:OK"]
     }, status:200
     else
