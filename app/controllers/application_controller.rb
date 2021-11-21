@@ -1,7 +1,8 @@
 class ApplicationController < ActionController::API
   include ActionController::Cookies
   include ActionController::Helpers
-  helper_method :log_in, :current_user, :current_user?, :remember, :log_out, :forgot, :login?
+  helper_method :log_in, :current_user, :current_user?, :remember, :log_out, :forgot, :login?, :microposts_response,
+                :logged_in_user, :user_response
 
 
   # skip_before_action :verify_authenticaty_token
@@ -54,6 +55,41 @@ class ApplicationController < ActionController::API
 
   def login?
     !current_user.nil?
+  end
+
+  def logged_in_user
+    unless login?
+      render json: { loggedIn: false, user: nil, messages:["ログインされていません。"]}, status: 202
+    end
+  end
+
+
+
+  # ユーザーに渡すマイクロソフトを整形・・・ユーザー情報もつけて渡す
+  def microposts_response(microposts)
+    @microposts = []
+    microposts.each do |_micropost|
+        @micropost= {
+          id: _micropost.id,
+          content: _micropost.content,
+          createdAt: _micropost.created_at,
+          user: _micropost.user
+        }
+        @microposts.push(@micropost)
+      end
+      return @microposts
+  end
+
+  def user_response(_user)
+    user = {
+      id: _user.id, 
+      name: _user.name,
+      email: _user.email,
+      createdAt: _user.created_at,
+      admin: _user.admin,
+      countMicroposts: _user.microposts.count,
+    }
+    return user
   end
 
 
