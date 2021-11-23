@@ -1,8 +1,9 @@
 class ApplicationController < ActionController::API
   include ActionController::Cookies
   include ActionController::Helpers
-  helper_method :log_in, :current_user, :current_user?, :remember, :log_out, :forgot, :login?, :microposts_response,
-                :logged_in_user, :user_response
+  helper_method :log_in, :current_user, :current_user?, :remember, :log_out, 
+                :forgot, :login?,:micropost_response, :microposts_response,
+                :logged_in_user, :user_response, :get_users_microposts,:images_response
 
 
   # skip_before_action :verify_authenticaty_token
@@ -64,20 +65,41 @@ class ApplicationController < ActionController::API
   end
 
 
+  def images_response(_images)
+    images = []
+
+    _images.each do |_image|
+      image = url_for(_image)
+      images.push(image)
+    end
+    return images
+  end
+
+
+
+  # ユーザーに渡すマイクロソフトを整形・・・ユーザー情報もつけて渡す
+  def micropost_response(_micropost)
+    
+    images = _micropost.images.attached? ? images_response(_micropost.images) : nil
+
+    @micropost= {
+      id: _micropost.id,
+      content: _micropost.content,
+      createdAt: _micropost.created_at,
+      user: _micropost.user,
+      images: images,
+    }
+    return @micropost
+  end
 
   # ユーザーに渡すマイクロソフトを整形・・・ユーザー情報もつけて渡す
   def microposts_response(microposts)
     @microposts = []
     microposts.each do |_micropost|
-        @micropost= {
-          id: _micropost.id,
-          content: _micropost.content,
-          createdAt: _micropost.created_at,
-          user: _micropost.user
-        }
+        @micropost= micropost_response(_micropost)
         @microposts.push(@micropost)
-      end
-      return @microposts
+    end
+    return @microposts
   end
 
   def user_response(_user)
@@ -93,13 +115,14 @@ class ApplicationController < ActionController::API
   end
 
 
+  def get_users_microposts(user, current_limit)
+    Micropost.where(user_id: user.id).limit(20).offset(current_limit)
+  end
+
+
   
   def hello_world
     render json: { text: "hello world!!!!"}
-  end
-
-  def home
-    render json: {text: "This is home!!"}
   end
 
 end
