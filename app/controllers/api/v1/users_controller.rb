@@ -5,7 +5,7 @@ class Api::V1::UsersController < ApplicationController
 
   def show
     @user = User.find_by(id: params[:id])
-    @microposts = @user.microposts
+    @microposts =get_users_microposts(@user, params[:current_limit])
     if @user.activated
       render json: {
         user: user_response(@user),

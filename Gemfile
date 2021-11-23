@@ -22,6 +22,11 @@ gem "dotenv-rails"
 
 # フロントエンドでのセッションクッキーの保存のため追加する
 gem "rails_same_site_cookie"   # 追加する "~> 0.1.8"
+gem "active_storage_validations"
+gem 'aws-sdk-s3',    require: false
+
+# ランダムサンプル生成
+gem "faker"
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
@@ -37,7 +42,7 @@ gem "foreman"
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem "faker"
+
 end
 
 group :development do
