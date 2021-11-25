@@ -6,8 +6,6 @@ class ApplicationController < ActionController::API
                 :logged_in_user, :user_response, :get_users_microposts,:images_response
 
 
-  # skip_before_action :verify_authenticaty_token
-
   def log_in(user)
     session[:user_id] = user.id
   end
@@ -86,7 +84,10 @@ class ApplicationController < ActionController::API
       id: _micropost.id,
       content: _micropost.content,
       createdAt: _micropost.created_at,
-      user: _micropost.user,
+      user: {
+        id:_micropost.user.id,
+        name:_micropost.user.name,
+      },
       images: images,
     }
     return @micropost
@@ -110,13 +111,15 @@ class ApplicationController < ActionController::API
       createdAt: _user.created_at,
       admin: _user.admin,
       countMicroposts: _user.microposts.count,
+      countFollowers: _user.followers.count,
+      countFollowing: _user.following.count,
     }
     return user
   end
 
 
-  def get_users_microposts(user, current_limit)
-    Micropost.where(user_id: user.id).limit(20).offset(current_limit)
+  def get_users_microposts(user_id, current_limit)
+    Micropost.where(user_id: user_id).limit(20).offset(current_limit)
   end
 
 

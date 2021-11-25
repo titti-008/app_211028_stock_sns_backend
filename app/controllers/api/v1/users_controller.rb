@@ -5,11 +5,9 @@ class Api::V1::UsersController < ApplicationController
 
   def show
     @user = User.find_by(id: params[:id])
-    @microposts =get_users_microposts(@user, params[:current_limit])
     if @user.activated
       render json: {
         user: user_response(@user),
-        microposts: microposts_response(@microposts),
         messages:["#{@user.name}の情報を取得しました。"]
       }, status:200
     else
@@ -34,16 +32,6 @@ class Api::V1::UsersController < ApplicationController
         "登録したメールアドレスにアカウント有効化用URLを送付しました。",
         "メールを確認しアカウントの作成を完了させてください。"
       ]}, status: 200
-
-      # log_in @user
-      # render json: { user:{
-      #   id: @user.id, 
-      #   name: @user.name,
-      #   email: @user.email,
-      #   createdAt: @user.created_at,
-      #   admin: @user.admin
-      #   }, messages:["ユーザー情報が登録できました"]  }, 
-      #   status: 200
 
     else
       puts @user.errors.full_messages
@@ -100,9 +88,13 @@ class Api::V1::UsersController < ApplicationController
     def get_users
       @users = []
       
-
-      User.where(activated: true).each do |_user|
-        @user = user_response(_user)
+      _users = User.where(activated: true)
+      _users.each  do |_user|
+        
+        @user = {
+        id: _user.id, 
+        name: _user.name,
+        }
         @users.push(@user)
       end
       return @users
