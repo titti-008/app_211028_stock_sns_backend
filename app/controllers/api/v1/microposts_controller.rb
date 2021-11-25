@@ -3,7 +3,7 @@ class Api::V1::MicropostsController < ApplicationController
   before_action :correct_user, only:[:destroy]
 
   def index
-    _microposts =get_users_microposts(@current_user, params[:current_limit])
+    _microposts =get_users_microposts(params[:user_id], params[:current_limit])
     @microposts = microposts_response(_microposts)
     render json: {
       microposts: @microposts,
@@ -13,9 +13,13 @@ class Api::V1::MicropostsController < ApplicationController
 
   def create
     @micropost = @current_user.microposts.build(micropost_params)
-    params[:images].each do |params_image|
 
-      @micropost.images.attach(params_image)
+    if params[:images]
+      params[:images].each do |params_image|
+  
+        @micropost.images.attach(params_image)
+      end
+
     end
     if @micropost.save
       render json: {

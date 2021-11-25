@@ -14,8 +14,14 @@ Rails.application.routes.draw do
       delete "/logout", to:"sessions#logout"
       get "/logged_in", to:"sessions#logged_in?"
 
+      resources :users do
+        member do
+          get :following, :followers
+        end
+      end
 
-      resources :users, only: [:index, :show, :new, :create, :update, :destroy]
+
+      # resources :users, only: [:index, :show, :new, :create, :update, :destroy]
       resources :account_activations, only: [:edit]
       resources :password_resets, only: [:create, :update]
       resources :microposts, only: [:index, :show, :create, :destroy]
