@@ -3,7 +3,8 @@ class ApplicationController < ActionController::API
   include ActionController::Helpers
   helper_method :log_in, :current_user, :current_user?, :remember, :log_out, 
                 :forgot, :login?,:micropost_response, :microposts_response,
-                :logged_in_user, :user_response, :get_users_microposts,:images_response
+                :logged_in_user, :user_response, :get_users_microposts,:images_response,
+                :is_follower?, :is_following?, :next_page
 
 
   def log_in(user)
@@ -113,6 +114,8 @@ class ApplicationController < ActionController::API
       countMicroposts: _user.microposts.count,
       countFollowers: _user.followers.count,
       countFollowing: _user.following.count,
+      isFollower: is_follower?(_user),
+      isFollowing: is_following?(_user)
     }
     return user
   end
@@ -120,6 +123,29 @@ class ApplicationController < ActionController::API
 
   def get_users_microposts(user_id, current_limit)
     Micropost.where(user_id: user_id).limit(20).offset(current_limit)
+  end
+
+  def get_myfeed(current_user,current_limit)
+    Micropost.where("user_id IN (?) OR user_id=?",current_user.following_ids,current_user.id).limit(20).offset(current_limit)
+  end
+
+  def is_follower?(user)
+    # debugger
+    @current_user.followers.include?(user)
+  end
+
+
+  def is_following?(user)
+    # debugger
+    @current_user.following.include?(user)
+  end
+
+
+  # 次のページがある場合はページ番号を返す(無限スクロール用)
+  def next_page(all_microposts)
+    next_page = params[:page].to_i + 1
+    next_id = all_microposts.paginate(page: next_page).length != 0 ? next_page : false
+    return next_id
   end
 
 

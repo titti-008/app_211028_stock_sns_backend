@@ -1,24 +1,24 @@
 class Api::V1::SessionsController < ApplicationController
-  before_action :current_user
+  # before_action :current_user
 
-  def create
-    user = User.find_by(email: params[:session][:email].downcase)
-    if user && user.authenticate(params[:session][:password])
-      if user.activated?
-        log_in user
-        params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-        redirect_back_or user
-      else
-        message  = "Account not activated. "
-        message += "Check your email for the activation link."
-        flash[:warning] = message
-        redirect_to root_url
-      end
-    else
-      flash.now[:danger] = 'Invalid email/password combination'
-      render 'new'
-    end
-  end
+  # def create
+  #   user = User.find_by(email: params[:session][:email].downcase)
+  #   if user && user.authenticate(params[:session][:password])
+  #     if user.activated?
+  #       log_in user
+  #       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+  #       redirect_back_or user
+  #     else
+  #       message  = "Account not activated. "
+  #       message += "Check your email for the activation link."
+  #       flash[:warning] = message
+  #       redirect_to root_url
+  #     end
+  #   else
+  #     flash.now[:danger] = 'Invalid email/password combination'
+  #     render 'new'
+  #   end
+  # end
 
 
   def login
@@ -26,11 +26,12 @@ class Api::V1::SessionsController < ApplicationController
     if @user && @user.authenticate(session_params[:password])
       if @user.activated?
         log_in @user
+        current_user
         params[:user][:remember_me] == 'on' ? remember(@user) : forget(@user)
         render json:  { loggedIn: true, messages:[
           "ログインしました。",
-          "やぁ、#{@user.name}"
-        ] ,user: user_response(@user)
+          "やぁ、#{@current_user.name}"
+        ] ,user: user_response(@current_user)
       }
       else
         render json:  {  messages:["アカウントが有効化されていません。","登録されたメールアドレスに送られたメールからアカウントの有効化を行ってください。"]}, status: 202

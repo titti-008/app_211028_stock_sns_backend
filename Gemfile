@@ -20,6 +20,9 @@ gem "rails-i18n"
 # .envファイルを扱うためのgem
 gem "dotenv-rails"
 
+# 無限スクロール用にページネーションが必要
+gem 'will_paginate'
+
 # フロントエンドでのセッションクッキーの保存のため追加する
 gem "rails_same_site_cookie"   # 追加する "~> 0.1.8"
 gem "active_storage_validations"
