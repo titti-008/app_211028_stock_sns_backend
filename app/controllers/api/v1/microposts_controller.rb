@@ -60,7 +60,6 @@ class Api::V1::MicropostsController < ApplicationController
   private ####################
 
   def micropost_params
-    # debugger
     params.permit(:content, :images)
   end
 
