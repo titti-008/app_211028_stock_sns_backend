@@ -1,6 +1,19 @@
 class Api::V1::UsersController < ApplicationController
   before_action :current_user, only: [:update, :destroy]
   before_action :admin_user, only: [:destroy]
+  before_action :logged_in_user, only:[:followers, :following,:show, :index, :destroy,:update,]
+
+  def following
+    @user = User.find_by(id: params[:id])
+    @following = get_users(@user.following)
+    render json:{users: @following, messages:["フォローしているユーザーを取得しました。"]}, status:200
+  end
+
+  def followers
+      @user = User.find_by(id: params[:id])
+    @followers = get_users(@user.followers)
+    render json:{users: @followers, messages:["フォロワーを取得しました。"]}, status:200
+  end
 
 
   def show
@@ -18,7 +31,7 @@ class Api::V1::UsersController < ApplicationController
 
   def index
 
-    @users = get_users()
+    @users = get_users(User.where(activated: true))
     render json: {users: @users, messages:["ユーザー一覧を表示します"]}, status: 200
   end
 
@@ -44,7 +57,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.find_by(id: params[:id])
     @name= @user.name
     if @user.destroy
-      @users = get_users
+      @users = get_users(User.where(activated: true))
       render json: {messages:["ユーザー(#{@name})を削除しました。"], users: @users}, status:200
     end
   end
@@ -85,10 +98,10 @@ class Api::V1::UsersController < ApplicationController
 
     end
 
-    def get_users
+    def get_users(_users)
       @users = []
       
-      _users = User.where(activated: true)
+
       _users.each  do |_user|
         
         @user = {

@@ -20,11 +20,13 @@ Rails.application.routes.draw do
         end
       end
 
-
-      # resources :users, only: [:index, :show, :new, :create, :update, :destroy]
       resources :account_activations, only: [:edit]
       resources :password_resets, only: [:create, :update]
-      resources :microposts, only: [:index, :show, :create, :destroy]
+      resources :relationships, only: [:create, :destroy, :show]
+      resources :microposts, only: [:show, :create, :destroy]
+      get "/microposts/myfeed/:page", to:"microposts#myfeed"
+      get "/microposts/:user_id/:page", to:"microposts#user_show"
+      
 
     end
   end
