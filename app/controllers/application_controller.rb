@@ -130,13 +130,11 @@ class ApplicationController < ActionController::API
   end
 
   def is_follower?(user)
-    # debugger
     @current_user.followers.include?(user)
   end
 
 
   def is_following?(user)
-    # debugger
     @current_user.following.include?(user)
   end
 
