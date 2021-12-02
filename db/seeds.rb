@@ -35,3 +35,56 @@ following = users[3..45]
 followers = users[2..50]
 following.each { |followed| user.follow(followed) }
 followers.each { |follower| follower.follow(user) }
+
+
+
+# Symbolデータ
+CSV.foreach("db/CSV/nasdaq_screener.csv", headers:true) do |row|
+  Stock.create(
+    symbol: row["symbol"],
+    name: row["name"],
+    country: row["country"],
+    ipoYear: row["ipoYear"],
+    sector: row["sector"],
+    industry: row["industry"]
+  )
+
+end
+
+# Earningデータ
+CSV.foreach("db/CSV/earnings_data.csv", headers:true) do |row|
+  Stock.find_by(symbol: row["symbol"]).earnings.create(
+      symbol: row["symbol"],
+      fiscalDateEnding: row["fiscalDateEnding"],
+      reportedDate: row["reportedDate"],
+      reportedEPS: row["reportedEPS"],
+      estimatedEPS: row["estimatedEPS"],
+      surprise: row["surprise"],
+      surprisePercentage: row["surprisePercentage"],
+      reportedCurrency: row["reportedCurrency"],
+      totalRevenue: row["totalRevenue"],
+      costOfRevenue: row["costOfRevenue"],
+      operatingIncome: row["operatingIncome"],
+      grossProfit: row["grossProfit"],
+      operatingCashflow: row["operatingCashflow"],
+      netIncome: row["netIncome"],
+    )
+end
+
+
+  # 次回EarningEstimateデータr
+  CSV.foreach("db/CSV/earnings_calendar.csv", headers:true) do |row|
+    stock = Stock.find_by(symbol: row["symbol"])
+
+    if stock
+      stock.earnings.create(
+        
+        symbol: row["symbol"],
+        fiscalDateEnding: row["fiscalDateEnding"],
+        reportedDate: row["reportDate"],
+        estimatedEPS: row["estimate"],
+      )
+    end
+end
+
+
