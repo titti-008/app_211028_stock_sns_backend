@@ -3,6 +3,9 @@ class Api::V1::UsersController < ApplicationController
   before_action :admin_user, only: [:destroy]
   before_action :logged_in_user, only:[:followers, :following,:show, :index, :destroy,:update,]
 
+ 
+
+
   def following
     @user = User.find_by(id: params[:id])
     @following = get_users(@user.following)
@@ -87,6 +90,8 @@ class Api::V1::UsersController < ApplicationController
   private
 
   ##################
+
+
     def user_params
       params.require(:user).permit(:id, :email, :name, :password, :password_confirmation)
     end
