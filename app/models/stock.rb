@@ -1,6 +1,6 @@
 class Stock < ApplicationRecord
   has_many :earnings, dependent: :destroy
-  validates :symbol, presence:true
+  validates :symbol, presence:true, uniqueness: true
   before_save :upcase_symbol
 
   def self.import(file)
