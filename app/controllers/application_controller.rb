@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
   helper_method :log_in, :current_user, :current_user?, :remember, :log_out, 
                 :forgot, :login?,:micropost_response, :microposts_response,
                 :logged_in_user, :user_response, :get_users_microposts,:images_response,
-                :is_follower?, :is_following?, :next_page, :get_earnings
+                :is_follower?, :is_following?, :next_page
 
 
   def log_in(user)
@@ -154,31 +154,6 @@ class ApplicationController < ActionController::API
 
   def client
     @client = Avantage::Client.new(ENV["API_ACCESS_KEY"])
-  end
-
-
-  def get_earnings(_symbol,stock)
-
-    symbol = _symbol.upcase
-    last_reported_earning = Earning.order(fiscalDateEnding: :desc).where(symbol: symbol).where.not(reportedEPS:nil).first
-    last_earning_estimate = Earning.order(fiscalDateEnding: :desc).where(symbol: symbol).where(reportedEPS: nil).first
-
-    # debugger ##########
-    if last_earning_estimate.nil?
-    end
-
-    last_reported_date = last_reported_earning ? last_reported_earning.fiscalDateEnding : Date.today
-    last_estimate_date = last_earning_estimate ? last_earning_estimate.fiscalDateEnding : Date.today
-    isMissingData = (last_estimate_date - last_reported_date) >= 100
-
-    if last_reported_earning.nil? || isMissingData
-      Earning.import_api_data("CASH_FLOW", "quarterlyReports",symbol,stock)
-      Earning.import_api_data("INCOME_STATEMENT", "quarterlyReports",symbol,stock)
-      Earning.import_api_data("EARNINGS", "quarterlyEarnings",symbol,stock)
-    end
-
-    return Stock.find_by(symbol: symbol).earnings
-
   end
 
 

@@ -29,9 +29,7 @@ Rails.application.routes.draw do
 
       get "/earnings/export_csv", to: "earnings#export_csv"
 
-      resources :stocks do
-        collection {post :import}
-      end
+      resources :stocks, only: :show
       
 
     end

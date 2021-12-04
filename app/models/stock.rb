@@ -1,5 +1,6 @@
 class Stock < ApplicationRecord
   has_many :earnings, dependent: :destroy
+  has_many :financial_data, dependent: :destroy
   validates :symbol, presence:true, uniqueness: true
   before_save :upcase_symbol
 

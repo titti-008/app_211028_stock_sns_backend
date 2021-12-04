@@ -33,8 +33,6 @@ class Api::V1::EarningsController < ApplicationController
         "surprise",
         "surprisePercentage",
 
-
-
         # INCOME_STATEMENT
         "reportedCurrency",
         "totalRevenue",

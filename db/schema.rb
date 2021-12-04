@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_30_150521) do
+ActiveRecord::Schema.define(version: 2021_12_04_051100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,29 @@ ActiveRecord::Schema.define(version: 2021_11_30_150521) do
     t.index ["symbol"], name: "index_earnings_on_symbol"
   end
 
+  create_table "financial_data", force: :cascade do |t|
+    t.string "symbol"
+    t.date "date"
+    t.date "fillingDate"
+    t.bigint "revenue"
+    t.bigint "estimatedRevenueAvg"
+    t.float "revenueGrowth"
+    t.float "eps"
+    t.float "estimatedEpsAvg"
+    t.float "epsgrowth"
+    t.string "reportedCurrency"
+    t.bigint "operatingCashFlow"
+    t.float "operatingCashFlowGrowth"
+    t.bigint "netIncome"
+    t.float "stockPrice"
+    t.bigint "numberOfShares"
+    t.bigint "marketCapitalization"
+    t.bigint "stock_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stock_id"], name: "index_financial_data_on_stock_id"
+  end
+
   create_table "microposts", force: :cascade do |t|
     t.text "content"
     t.bigint "user_id", null: false
@@ -117,5 +140,6 @@ ActiveRecord::Schema.define(version: 2021_11_30_150521) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "earnings", "stocks"
+  add_foreign_key "financial_data", "stocks"
   add_foreign_key "microposts", "users"
 end
