@@ -14,6 +14,7 @@ class Api::V1::StocksController < ApplicationController
       render json:{
         messages:["#{@stock.symbol}の情報を取得しました。"],
         stock: @stock,
+        isFollowingStock:@stock.is_following_by_user?(current_user),
         earnings: @financial_data
       }, status: 200
     else
