@@ -4,6 +4,10 @@ class Stock < ApplicationRecord
   validates :symbol, presence:true, uniqueness: true
   before_save :upcase_symbol
 
+  has_many :stock_relationships, dependent: :destroy
+  has_many :users, through: :stock_relationships
+
+
   def self.import(file)
     CSV.foreach(file.path, headers:true) do |row|
       stock = find_by(symbol: row["Symbol"]) || new
@@ -13,6 +17,22 @@ class Stock < ApplicationRecord
 
     end
   end
+
+
+  #すでにフォローしているuserならtrue
+  def is_following_by_user?(user)
+    self.users.include?(user)
+  end
+
+    # stockのフォロー
+    def add_follower(user)
+      self.users << user
+    end
+  
+    def delete_follower(user)
+      self.stock_relationships.find_by(user_id: user.id).destroy
+    end
+
 
 
   private ############################

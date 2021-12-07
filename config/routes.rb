@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  namespace :api do
+    namespace :v1 do
+      get 'stock_relationships/create'
+      get 'stock_relationships/destroy'
+    end
+  end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   get "hello_world", to: "application#hello_world"
 
@@ -23,6 +29,7 @@ Rails.application.routes.draw do
       resources :account_activations, only: [:edit]
       resources :password_resets, only: [:create, :update]
       resources :relationships, only: [:create, :destroy, :show]
+      resources :stock_relationships, only: [:create, :destroy]
       resources :microposts, only: [:show, :create, :destroy]
       get "/microposts/myfeed/:page", to:"microposts#myfeed"
       get "/microposts/:user_id/:page", to:"microposts#user_show"

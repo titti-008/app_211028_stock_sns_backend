@@ -147,14 +147,16 @@ class ApplicationController < ActionController::API
   end
 
 
-  
-  def hello_world
-    render json: { text: "hello world!!!!"}
-  end
-
   def client
     @client = Avantage::Client.new(ENV["API_ACCESS_KEY"])
   end
+
+
+  # def is_following_stock?(user)
+  #   @current_user.sto.include?(user)
+  # end
+
+
 
 
 

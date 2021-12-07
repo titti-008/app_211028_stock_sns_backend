@@ -1,14 +1,20 @@
 class User < ApplicationRecord
   has_many :microposts, dependent: :destroy
+
   has_many :active_relationships, class_name: "Relationship",
                     foreign_key: "follower_id",
                     dependent: :destroy
+  has_many :following, through: :active_relationships, source: :followed
+
   has_many :passive_relationships, class_name: "Relationship",
                     foreign_key: "followed_id",
                     dependent: :destroy
-  has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
   attr_accessor :remember_token, :activation_token, :reset_token
+
+  has_many :stock_relationships, dependent: :destroy
+  has_many :stocks, through: :stock_relationships
+
   before_create :create_activation_digest
   before_save   :downcase_email
   validates :name, presence: true, length: { maximum: 20 }
@@ -32,6 +38,10 @@ class User < ApplicationRecord
   def self.new_token
     SecureRandom.urlsafe_base64
   end
+
+
+
+############# ユーザーログイン・有効化 #############
 
   # 永続セッションのためにユーザーをデータベースに記憶する
   def remember
@@ -80,6 +90,9 @@ class User < ApplicationRecord
     reset_sent_at < 2.hours.ago
   end
 
+
+
+############# ユーザーフォロー #############
   # ユーザーフォロー
   def follow(other_user)
     self.following << other_user
@@ -87,12 +100,29 @@ class User < ApplicationRecord
   
   # フォロー解除
   def unfollow(other_user)
-    active_relationships.find_by(followed_id: other_user.id).destroy
+    self.active_relationships.find_by(followed_id: other_user.id).destroy
   end
 
   # 現在のユーザーがフォローしてたらtrue
   def following?(other_user)
+    
     self.following.include?(other_user)
+  end
+
+############# stockのフォロー #############
+  # # stockのフォロー
+  # def follow_stock(stock)
+  #   debugger
+  #   self.stocks << stock
+  # end
+
+  # def unfollow_stock(stock)
+  #   self.stock_relationships.find_by(stock_id: stock.id).destroy
+  # end
+
+  #すでにフォローしているstockならtrue
+  def following_stock?(stock)
+    self.stocks.include?(stock)
   end
 
 
