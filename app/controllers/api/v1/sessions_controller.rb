@@ -6,7 +6,7 @@ class Api::V1::SessionsController < ApplicationController
       if @user.activated?
         log_in @user
         current_user
-        params[:user][:remember_me] == 'on' ? remember(@user) : forget(@user)
+        params[:user][:rememberMe] == 'on' ? remember(@user) : forget(@user)
         render json:  { loggedIn: true, messages:[
           "ログインしました。",
           "やぁ、#{@current_user.name}"
@@ -22,8 +22,9 @@ class Api::V1::SessionsController < ApplicationController
   end
 
   def logout
+    debugger
     log_out if login?
-    render json: { loggedIn: false, messages:[ "ログアウトしました", "{@current_user.name} "]}, status: 200
+    render json: { loggedIn: false, user: nil,  messages:[ "ログアウトしました", "{@current_user.name} "]}, status: 200
   end
 
   def logged_in?
@@ -40,6 +41,6 @@ class Api::V1::SessionsController < ApplicationController
   private ###########################3
 
     def session_params
-      params.require(:user).permit( :email, :password, :id, :remember_me)
+      params.require(:user).permit( :email, :password, :id, :rememberMe)
     end
 end

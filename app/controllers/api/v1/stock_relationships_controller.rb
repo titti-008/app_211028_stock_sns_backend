@@ -6,9 +6,12 @@ class Api::V1::StockRelationshipsController < ApplicationController
     stock = Stock.find_by(symbol: params[:id])
     if !current_user.following_stock?(stock)
       stock.add_follower(current_user)
+
+      
       render json: {
-        isFollowingStock: current_user.following_stock?(stock) ,
-        messages:["#{stock.symbol}をフォローしました"]
+        user:user_response(current_user),
+        messages:["#{stock.symbol}をフォローしました"],
+        loggedIn: true,
       }, status:200
     else
       render json: {messages:["すでに#{stock.symbol}をフォローしています"]}, status: 202
@@ -22,8 +25,9 @@ class Api::V1::StockRelationshipsController < ApplicationController
     if current_user.following_stock?(stock)
       stock.delete_follower(current_user)
       render json: {
-        isFollowingStock: current_user.following_stock?(stock),
-        messages:["#{stock.symbol}のフォローを解除しました"]
+        user: user_response(current_user),
+        messages:["#{stock.symbol}のフォローを解除しました"],
+        loggedIn: true,
       }, status:200
     else
       render json: {messages:["まだ#{stock.symbol}をフォローしていません"]}, status: 202

@@ -115,7 +115,8 @@ class ApplicationController < ActionController::API
       countFollowers: _user.followers.count,
       countFollowing: _user.following.count,
       isFollower: is_follower?(_user),
-      isFollowing: is_following?(_user)
+      isFollowing: is_following?(_user),
+      followingStocks: _user.stocks
     }
     return user
   end
@@ -156,7 +157,10 @@ class ApplicationController < ActionController::API
   #   @current_user.sto.include?(user)
   # end
 
-
+  def hello_world
+    render json: { text: "hello world!!!!"}
+  end
+  
 
 
 
