@@ -18,6 +18,7 @@ class Api::V1::MicropostsController < ApplicationController
 
   # 指定したユーザー(current_user)の投稿を取得
   def myfeed
+    debugger
       all_microposts =get_myfeed(@current_user, params[:current_limit])
       _microposts = all_microposts.paginate(page:params[:page])
       @microposts = microposts_response(_microposts)

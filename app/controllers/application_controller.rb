@@ -116,7 +116,6 @@ class ApplicationController < ActionController::API
       countFollowing: _user.following.count,
       isFollower: is_follower?(_user),
       isFollowing: is_following?(_user),
-      followingStocks: _user.stocks
     }
     return user
   end

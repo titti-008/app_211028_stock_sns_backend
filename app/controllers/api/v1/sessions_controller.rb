@@ -22,7 +22,6 @@ class Api::V1::SessionsController < ApplicationController
   end
 
   def logout
-    debugger
     log_out if login?
     render json: { loggedIn: false, user: nil,  messages:[ "ログアウトしました", "{@current_user.name} "]}, status: 200
   end

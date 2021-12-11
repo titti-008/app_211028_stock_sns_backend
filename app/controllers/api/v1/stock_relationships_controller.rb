@@ -9,12 +9,14 @@ class Api::V1::StockRelationshipsController < ApplicationController
 
       
       render json: {
-        user:user_response(current_user),
+        stocks: current_user.stocks,
         messages:["#{stock.symbol}をフォローしました"],
-        loggedIn: true,
       }, status:200
     else
-      render json: {messages:["すでに#{stock.symbol}をフォローしています"]}, status: 202
+      render json: {
+        messages:["すでに#{stock.symbol}をフォローしています"],
+        stocks: current_user.stocks,
+      }, status: 202
     end
 
   end
@@ -25,12 +27,14 @@ class Api::V1::StockRelationshipsController < ApplicationController
     if current_user.following_stock?(stock)
       stock.delete_follower(current_user)
       render json: {
-        user: user_response(current_user),
+        stocks: current_user.stocks,
         messages:["#{stock.symbol}のフォローを解除しました"],
-        loggedIn: true,
       }, status:200
     else
-      render json: {messages:["まだ#{stock.symbol}をフォローしていません"]}, status: 202
+      render json: {
+        messages:["まだ#{stock.symbol}をフォローしていません"],
+        stocks: current_user.stocks,
+        }, status: 202
     end
   end
 
