@@ -44,9 +44,7 @@ class Api::V1::MicropostsController < ApplicationController
 
     end
     if @micropost.save
-      render json: {
-        messages:["呟きを投稿しました。"]
-      }, status: 200
+      redirect_to :action => "myfeed"
     else
       render json:{messages: @micropost.errors.full_messages} ,status:202
     end

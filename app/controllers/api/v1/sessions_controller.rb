@@ -23,7 +23,7 @@ class Api::V1::SessionsController < ApplicationController
 
   def logout
     log_out if login?
-    render json: { loggedIn: false, user: nil,  messages:[ "ログアウトしました", "{@current_user.name} "]}, status: 200
+    render json: { loggedIn: false, user: nil,  messages:[ "ログアウトしました"]}, status: 200
   end
 
   def logged_in?
