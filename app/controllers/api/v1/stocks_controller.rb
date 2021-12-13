@@ -72,7 +72,7 @@ class Api::V1::StocksController < ApplicationController
 
       symbol = _symbol.upcase
       last_reported_financial_datum = FinancialDatum.order(date: :desc).where(symbol: symbol).where.not(revenue:nil).first
-      last_estimated_financial_datum = FinancialDatum.order(date: :desc).where(symbol: symbol).where.not(estimatedRevenueAvg: nil).first
+      last_estimated_financial_datum = FinancialDatum.order(date: :desc).where(symbol: symbol).where.not(revenueEstimated: nil).first
 
       # debugger ##########
 
@@ -84,14 +84,15 @@ class Api::V1::StocksController < ApplicationController
       is_missing_estimated_data = (Date.today - last_estimate_date) >= 120
                   
       if last_estimated_financial_datum.nil? || is_missing_estimated_data
-        FinancialDatum.import_api_data("analyst-estimates", symbol,stock)
+        # FinancialDatum.import_api_data("analyst-estimates", symbol,stock)
       end
 
       if last_reported_financial_datum.nil? || is_missing_reported_data
-        FinancialDatum.import_api_data("income-statement",symbol,stock)
-        FinancialDatum.import_api_data("cash-flow-statement", symbol,stock)
-        FinancialDatum.import_api_data("enterprise-values", symbol,stock)
-        FinancialDatum.import_api_data("financial-growth", symbol,stock)
+        # FinancialDatum.import_api_data("income-statement",symbol,stock)
+        # FinancialDatum.import_api_data("cash-flow-statement", symbol,stock)
+        # FinancialDatum.import_api_data("enterprise-values", symbol,stock)
+        # FinancialDatum.import_api_data("financial-growth", symbol,stock)
+        FinancialDatum.import_api_data("historical/earning_calendar",symbol,stock)
       end
 
       return Stock.find_by(symbol: symbol).financial_data
