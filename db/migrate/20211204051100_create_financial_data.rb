@@ -5,10 +5,10 @@ class CreateFinancialData < ActiveRecord::Migration[6.1]
       t.date :date, nil:false
       t.date :fillingDate
       t.bigint :revenue
-      t.bigint :estimatedRevenueAvg
+      t.bigint :revenueEstimated
       t.float :revenueGrowth
       t.float :eps
-      t.float :estimatedEpsAvg
+      t.float :epsEstimated
       t.float :epsgrowth
       t.string :reportedCurrency
       t.bigint :operatingCashFlow
