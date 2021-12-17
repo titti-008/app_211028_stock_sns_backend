@@ -1,17 +1,26 @@
 # メインのサンプルユーザーを1人作成する
 User.create!(name:  "testman",
   email: "testman@gmail.com",
-  password:              "password",
-  password_confirmation: "password",
+  password:              "Password1",
+  password_confirmation: "Password1",
   admin: true,
   activated: true,
   activated_at: Time.zone.now)
 
+
+  User.create!(name:  "administer",
+    email: "admin@gmail.com",
+    password:              ENV["admin_pass"],
+    password_confirmation: ENV["admin_pass"],
+    admin: true,
+    activated: true,
+    activated_at: Time.zone.now)
+
 # 追加のユーザーをまとめて生成する
 99.times do |n|
-  name  = "testman#{n+1}"
-  email = "testman#{n+1}@gmail.com"
-  password = "password"
+  name  = "testman#{n}"
+  email = "testman#{n}@gmail.com"
+  password = "Password1"
   User.create!(name:  name,
       email: email,
       password:              password,
@@ -19,6 +28,7 @@ User.create!(name:  "testman",
       activated: true,
       activated_at: Time.zone.now)
 end
+
 
 
 # ユーザーの一部にマイクロポストを作成する
@@ -51,40 +61,10 @@ CSV.foreach("db/CSV/nasdaq_screener.csv", headers:true) do |row|
 
 end
 
-# # Earningデータ
-# CSV.foreach("db/CSV/earnings_data.csv", headers:true) do |row|
-#   Stock.find_by(symbol: row["symbol"]).earnings.create(
-#       symbol: row["symbol"],
-#       fiscalDateEnding: row["fiscalDateEnding"],
-#       reportedDate: row["reportedDate"],
-#       reportedEPS: row["reportedEPS"],
-#       estimatedEPS: row["estimatedEPS"],
-#       surprise: row["surprise"],
-#       surprisePercentage: row["surprisePercentage"],
-#       reportedCurrency: row["reportedCurrency"],
-#       totalRevenue: row["totalRevenue"],
-#       costOfRevenue: row["costOfRevenue"],
-#       operatingIncome: row["operatingIncome"],
-#       grossProfit: row["grossProfit"],
-#       operatingCashflow: row["operatingCashflow"],
-#       netIncome: row["netIncome"],
-#     )
-# end
 
+symbols = ["TSLA", "AAPL", "GOOG", "AMZN", "FB", "NVDA", "AMD", "ABNB"]
 
-  # # 次回EarningEstimateデータ
-  # CSV.foreach("db/CSV/earnings_calendar.csv", headers:true) do |row|
-  #   stock = Stock.find_by(symbol: row["symbol"])
-
-  #   if stock
-  #     stock.earnings.create(
-        
-  #       symbol: row["symbol"],
-  #       fiscalDateEnding: row["fiscalDateEnding"],
-  #       reportedDate: row["reportDate"],
-  #       estimatedEPS: row["estimate"],
-  #     )
-  #   end
-  # end
-
-
+symbols.each do |symbol|
+  stock = Stock.find_by(symbol: symbol)
+  stock.add_follower(user)
+end
