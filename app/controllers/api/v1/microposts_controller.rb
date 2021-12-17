@@ -18,15 +18,14 @@ class Api::V1::MicropostsController < ApplicationController
 
   # 指定したユーザー(current_user)の投稿を取得
   def myfeed
-      all_microposts =get_myfeed(@current_user, params[:current_limit])
-      _microposts = all_microposts.paginate(page:params[:page])
-      @microposts = microposts_response(_microposts)
-      next_id = next_page(all_microposts)
-      render json: {
-        microposts: @microposts,
-        messages: ["マイフィードを取得しました"],
-        nextId: next_id
-      }, status:200
+      
+
+    render_myfeed(params[:current_limit])
+
+
+    
+
+
   end
 
 
@@ -44,7 +43,7 @@ class Api::V1::MicropostsController < ApplicationController
 
     end
     if @micropost.save
-      redirect_to :action => "myfeed"
+      render_myfeed(1)
     else
       render json:{messages: @micropost.errors.full_messages} ,status:202
     end
@@ -67,4 +66,17 @@ class Api::V1::MicropostsController < ApplicationController
       render json: {messages: ["ログインユーザーの投稿しか削除できません"]} ,status:202
     end
   end
+
+  def render_myfeed(current_limit)
+    all_microposts =get_myfeed(@current_user, current_limit)
+      _microposts = all_microposts.paginate(page:params[:page])
+      @microposts = microposts_response(_microposts)
+      next_id = next_page(all_microposts)
+      render json: {
+        microposts: @microposts,
+        messages: ["マイフィードを取得しました"],
+        nextId: next_id
+      }, status:200
+  end
+
 end

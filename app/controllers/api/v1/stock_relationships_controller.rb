@@ -23,6 +23,7 @@ class Api::V1::StockRelationshipsController < ApplicationController
 
   def destroy
     stock = Stock.find_by(symbol: params[:id])
+
     
     if current_user.following_stock?(stock)
       stock.delete_follower(current_user)
