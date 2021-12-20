@@ -3,9 +3,10 @@ User.create!(name:  "testman",
   email: "testman@gmail.com",
   password:              "Password1",
   password_confirmation: "Password1",
-  admin: true,
+  admin: false,
   activated: true,
   activated_at: Time.zone.now)
+
 
 
   User.create!(name:  "administer",
@@ -62,7 +63,7 @@ CSV.foreach("db/CSV/nasdaq_screener.csv", headers:true) do |row|
 end
 
 
-symbols = ["TSLA", "AAPL", "GOOG", "AMZN", "FB", "NVDA", "AMD", "ABNB"]
+symbols = ["TSLA", "AAPL", "GOOG", "AMZN", "FB", "NVDA", "AMD", "ABNB","DAL"]
 
 symbols.each do |symbol|
   stock = Stock.find_by(symbol: symbol)
