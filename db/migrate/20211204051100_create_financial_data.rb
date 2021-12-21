@@ -2,7 +2,9 @@ class CreateFinancialData < ActiveRecord::Migration[6.1]
   def change
     create_table :financial_data do |t|
       t.string :symbol, nil:false
-      t.date :date, nil:false
+      t.date :endOfQuarter, nil:false
+      t.date :announcementDate
+      t.date :date
       t.date :fillingDate
       t.bigint :revenue
       t.bigint :revenueEstimated

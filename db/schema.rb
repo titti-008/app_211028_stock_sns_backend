@@ -69,6 +69,8 @@ ActiveRecord::Schema.define(version: 2021_12_07_105348) do
 
   create_table "financial_data", force: :cascade do |t|
     t.string "symbol"
+    t.date "endOfQuarter"
+    t.date "announcementDate"
     t.date "date"
     t.date "fillingDate"
     t.bigint "revenue"
