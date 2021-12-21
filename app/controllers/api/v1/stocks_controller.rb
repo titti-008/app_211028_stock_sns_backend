@@ -71,8 +71,8 @@ class Api::V1::StocksController < ApplicationController
     def get_financial_data(_symbol,stock)
 
       symbol = _symbol.upcase
-      last_reported_financial_datum = FinancialDatum.order(date: :desc).where(symbol: symbol).where.not(revenue:nil).first
-      last_estimated_financial_datum = FinancialDatum.order(date: :desc).where(symbol: symbol).where.not(revenueEstimated: nil).first
+      last_reported_financial_datum = FinancialDatum.order(endOfQuarter: :desc).where(symbol: symbol).where.not(revenue:nil).first
+      last_estimated_financial_datum = FinancialDatum.order(endOfQuarter: :desc).where(symbol: symbol).where.not(revenueEstimated: nil).first
 
       # debugger ##########
 
@@ -88,11 +88,11 @@ class Api::V1::StocksController < ApplicationController
       end
 
       if last_reported_financial_datum.nil? || is_missing_reported_data
-        # FinancialDatum.import_api_data("income-statement",symbol,stock)
-        # FinancialDatum.import_api_data("cash-flow-statement", symbol,stock)
         # FinancialDatum.import_api_data("enterprise-values", symbol,stock)
-        # FinancialDatum.import_api_data("financial-growth", symbol,stock)
-        FinancialDatum.import_api_data("historical/earning_calendar",symbol,stock)
+        FinancialDatum.import_api_data("financial-growth", symbol,stock,"endOfQuarter")
+        FinancialDatum.import_api_data("historical/earning_calendar",symbol,stock,"announcementDate")
+        FinancialDatum.import_api_data("income-statement",symbol,stock,"endOfQuarter")
+        FinancialDatum.import_api_data("cash-flow-statement", symbol,stock,"endOfQuarter")
       end
 
       return Stock.find_by(symbol: symbol).financial_data
