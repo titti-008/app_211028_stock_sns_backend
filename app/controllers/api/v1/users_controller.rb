@@ -68,6 +68,7 @@ class Api::V1::UsersController < ApplicationController
 
   def update
     @user = User.find_by(id: params[:id])
+    # debugger
 
     if current_user?(@user)
       if @user.update(user_params)
@@ -81,7 +82,7 @@ class Api::V1::UsersController < ApplicationController
       end
       
     else
-      render json: {messages: ["ログインされていません"]}, status:202
+      render json: {messages: ["ユーザー情報の編集に失敗しました。"]}, status:202
     end
 
 
