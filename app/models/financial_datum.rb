@@ -12,7 +12,7 @@ class FinancialDatum < ApplicationRecord
 
   def self.import_api_data(function, _symbol, stock, dateType )
 
-    base_url = "https://financialmodelingprep.com/api/v3"
+    base_url = ENV["API_URL"]
     api_key = ENV["API_KEY"]
 
     symbol = _symbol.upcase

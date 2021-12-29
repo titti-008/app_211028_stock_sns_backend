@@ -35,6 +35,8 @@ Rails.application.routes.draw do
       
       get "/earnings/export_csv", to: "earnings#export_csv"
       
+      
+      get "/stocks/stock_historical",  to:"stocks#stock_historical_price"
       get "/stocks/my_following_stock", to:"stocks#my_following_stock"
       resources :stocks, only: :show
       resources :stock_relationships, only: [:create, :destroy]
