@@ -63,7 +63,7 @@ CSV.foreach("db/CSV/nasdaq_screener.csv", headers:true) do |row|
 end
 
 
-symbols = ["TSLA", "AAPL", "GOOG", "AMZN", "FB", "NVDA", "AMD", "ABNB","DAL","CCL","AR","FANG","MSFT"]
+symbols = ["TSLA", "AAPL", "GOOG", "AMZN", "FB", "NVDA", "AMD", "ABNB","DAL","CCL","AR","FANG","MSFT","NFLX"]
 
 symbols.each do |symbol|
   stock = Stock.find_by(symbol: symbol)

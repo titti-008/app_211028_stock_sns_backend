@@ -43,30 +43,6 @@ ActiveRecord::Schema.define(version: 2021_12_07_105348) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "earnings", force: :cascade do |t|
-    t.string "symbol"
-    t.date "fiscalDateEnding"
-    t.date "reportedDate"
-    t.float "reportedEPS"
-    t.float "estimatedEPS"
-    t.float "surprise"
-    t.float "surprisePercentage"
-    t.string "reportedCurrency"
-    t.bigint "totalRevenue"
-    t.bigint "costOfRevenue"
-    t.bigint "operatingIncome"
-    t.bigint "grossProfit"
-    t.bigint "operatingCashflow"
-    t.bigint "netIncome"
-    t.bigint "stock_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["fiscalDateEnding"], name: "index_earnings_on_fiscalDateEnding"
-    t.index ["stock_id"], name: "index_earnings_on_stock_id"
-    t.index ["symbol", "fiscalDateEnding"], name: "index_earnings_on_symbol_and_fiscalDateEnding", unique: true
-    t.index ["symbol"], name: "index_earnings_on_symbol"
-  end
-
   create_table "financial_data", force: :cascade do |t|
     t.string "symbol"
     t.date "endOfQuarter"
@@ -149,7 +125,6 @@ ActiveRecord::Schema.define(version: 2021_12_07_105348) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "earnings", "stocks"
   add_foreign_key "financial_data", "stocks"
   add_foreign_key "microposts", "users"
 end

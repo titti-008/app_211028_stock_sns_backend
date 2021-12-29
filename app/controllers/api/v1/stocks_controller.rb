@@ -1,5 +1,5 @@
 class Api::V1::StocksController < ApplicationController
-  before_action :logged_in_user
+  before_action :logged_in_user, only:[:show, :my_following_stock ]
   before_action :current_user
 
 
@@ -29,43 +29,40 @@ class Api::V1::StocksController < ApplicationController
   def my_following_stock
     stocks = current_user.stocks
     if stocks
+
+      my_following_stocks_price = getMyStocksPrice(stocks)
+
       render json:{
         messages:["フォローしている株式を取得しました"],
-        stocks: stocks
+        stocks: my_following_stocks_price
       }
     else
       render json:{
         messages:["フォローしている株式がありません"]
       }
     end
+  end
 
+  # 日足チャート用のdaily株価を取得
+  def stock_historical_price
+
+    response = get_historical_price(params[:symbol], params[:day])
+
+    if response["symbol"] == params[:symbol]  
+      render json:{
+        symbol: response["symbol"],
+        historical: response["historical"],
+        messsages: ["daily株価データを取得しました。"]
+      }
+
+    else
+      render json:{
+        messages:["株式情報が取得できません"]
+      }
+    end
   end
 
   private #####################################################################
-
-    # def get_earnings(_symbol,stock)
-
-    #   symbol = _symbol.upcase
-    #   last_reported_earning = Earning.order(fiscalDateEnding: :desc).where(symbol: symbol).where.not(reportedEPS:nil).first
-    #   last_earning_estimate = Earning.order(fiscalDateEnding: :desc).where(symbol: symbol).where(reportedEPS: nil).first
-
-    #   # debugger ##########
-    #   if last_earning_estimate.nil?
-    #   end
-
-    #   last_reported_date = last_reported_earning ? last_reported_earning.fiscalDateEnding : Date.today
-    #   last_estimate_date = last_earning_estimate ? last_earning_estimate.fiscalDateEnding : Date.today
-    #   isMissingData = (last_estimate_date - last_reported_date) >= 100
-
-    #   if last_reported_earning.nil? || isMissingData
-    #     Earning.import_api_data("CASH_FLOW", "quarterlyReports",symbol,stock)
-    #     Earning.import_api_data("INCOME_STATEMENT", "quarterlyReports",symbol,stock)
-    #     Earning.import_api_data("EARNINGS", "quarterlyEarnings",symbol,stock)
-    #   end
-
-    #   return Stock.find_by(symbol: symbol).earnings
-
-    # end
     
 
     def get_financial_data(_symbol,stock)
@@ -73,8 +70,6 @@ class Api::V1::StocksController < ApplicationController
       symbol = _symbol.upcase
       last_reported_financial_datum = FinancialDatum.order(endOfQuarter: :desc).where(symbol: symbol).where.not(revenue:nil).first
       last_estimated_financial_datum = FinancialDatum.order(endOfQuarter: :desc).where(symbol: symbol).where.not(revenueEstimated: nil).first
-
-      # debugger ##########
 
       last_reported_date = last_reported_financial_datum ? last_reported_financial_datum.date : Date.today
       last_estimate_date = last_estimated_financial_datum ? last_estimated_financial_datum.date : Date.today
@@ -96,7 +91,60 @@ class Api::V1::StocksController < ApplicationController
       end
 
       return Stock.find_by(symbol: symbol).financial_data
-
     end
+
+
+
+    # APIからフォローしている株式の価格情報を取得する
+    def getMyStocksPrice(stocks)
+
+      base_url = ENV["API_URL"]
+      api_key = ENV["API_KEY"]
+
+      symbols = []
+
+      stocks.each do |stock|
+        symbols.push(stock.symbol)
+      end
+
+      symbols_url = symbols.join(",")
+      
+      uri = URI.parse("#{base_url}/quote/#{symbols_url}?apikey=#{api_key}")
+      request = Net::HTTP::Get.new(uri)
+      request["Upgrade-Insecure-Requests"] = "1"
+      
+      req_options = {
+        use_ssl: uri.scheme == "https",
+      }
+      
+      response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+        http.request(request)
+      end
+
+      return JSON.parse(response.body)
+      
+    end
+
+    def get_historical_price(symbol, day)
+
+      base_url = ENV["API_URL"]
+      api_key = ENV["API_KEY"]
+
+      uri = URI.parse("#{base_url}/historical-price-full/#{symbol}?timeseries=#{day}&apikey=#{api_key}")
+      request = Net::HTTP::Get.new(uri)
+      request["Upgrade-Insecure-Requests"] = "1"
+      
+      req_options = {
+        use_ssl: uri.scheme == "https",
+      }
+      
+      response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+        http.request(request)
+      end
+
+      return JSON.parse(response.body)
+      
+    end
+
 
 end
