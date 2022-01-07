@@ -1,24 +1,4 @@
-# README
+# [詳細はこちらを参照](https://github.com/titti-008/app_211028_stock_sns_frontend_3)
+※ フロントエンドのレポジトリーです
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+<img src="public/0_Screen_image.jpg" >
